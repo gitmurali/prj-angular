@@ -37,6 +37,12 @@ export class RecipeService {
         return this.recipes.slice(); //get only copy of recipes not original recipes array..
     }
 
+    getRecipe(id: number) {
+      return this.recipes.slice()[id];
+    }
+
+
+
     addIngredientsToShoppingList(ingredients: Ingredient[]) {
           this.slService.addIngredients(ingredients);
     }
