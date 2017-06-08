@@ -1,10 +1,11 @@
 import {Ingredient} from "../shared/ingredient.model";
 import {EventEmitter, Injectable} from "@angular/core";
+import {Subject} from "rxjs/Subject";
 
 // @Injectable (only use injectable when you want to include other service in this service)
 export class ShoppingListService {
 
-  ingredientsChagned = new EventEmitter<Ingredient[]>();
+  ingredientsChagned = new Subject<Ingredient[]>();
   addIngredient = new EventEmitter<Ingredient>();
 
   private ingredients: Ingredient[] = [
@@ -20,7 +21,7 @@ export class ShoppingListService {
     this.addIngredient.subscribe(
       (ingredient: Ingredient) => {
         this.ingredients.push(ingredient);
-        this.ingredientsChagned.emit(this.ingredients.slice());
+        this.ingredientsChagned.next(this.ingredients.slice());
       }
     );
   }
