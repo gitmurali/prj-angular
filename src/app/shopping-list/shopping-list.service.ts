@@ -7,6 +7,7 @@ export class ShoppingListService {
 
   ingredientsChagned = new Subject<Ingredient[]>();
   addIngredient = new EventEmitter<Ingredient>();
+  startedEditing = new Subject<number>();
 
   private ingredients: Ingredient[] = [
     new Ingredient('Apples', 5),
@@ -24,6 +25,20 @@ export class ShoppingListService {
         this.ingredientsChagned.next(this.ingredients.slice());
       }
     );
+  }
+
+  getIngredient(index: number) {
+    return this.ingredients.slice()[index];
+  }
+
+  updateIngredient(index: number, ing: Ingredient) {
+    this.ingredients[index] = ing;
+    this.ingredientsChagned.next(this.ingredients.slice());
+  }
+
+  deleteIngredient(index: number) {
+      this.ingredients.splice(index, 1);
+      this.ingredientsChagned.next(this.ingredients.slice());
   }
 
   addIngredients(ingredients: Ingredient[]) {
