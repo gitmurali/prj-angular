@@ -4,6 +4,7 @@ import {Response} from "@angular/http";
 import {Recipe} from "../recipes/recipe.model";
 import {RecipeService} from "../recipes/recipe.service";
 import 'rxjs/Rx';
+import {AuthService} from "../auth/auth.service";
 
 @Component({
   selector: 'app-header',
@@ -11,7 +12,9 @@ import 'rxjs/Rx';
 })
 export class HeaderComponent {
 
-  constructor(private dataStoreService: DataStorageService, private recipeService: RecipeService) {
+  constructor(private dataStoreService: DataStorageService,
+              private recipeService: RecipeService,
+              private authService: AuthService) {
   }
 
   onSaveData() {
@@ -39,5 +42,9 @@ export class HeaderComponent {
           this.recipeService.setRecipes(recipes);
         }
       );
+  }
+
+  onLogout() {
+    this.authService.logout();
   }
 }
