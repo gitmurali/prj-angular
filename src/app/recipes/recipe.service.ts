@@ -1,72 +1,63 @@
-import {Recipe} from './recipe.model';
-import {Injectable} from "@angular/core";
-import {Ingredient} from "../shared/ingredient.model";
-import {ShoppingListService} from "../shopping-list/shopping-list.service";
-import {Subject} from "rxjs/Subject";
+import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs/Subject';
+
+import { Recipe } from './recipe.model';
+import { Ingredient } from '../shared/ingredient.model';
+import { ShoppingListService } from '../shopping-list/shopping-list.service';
 
 @Injectable()
 export class RecipeService {
+  recipesChanged = new Subject<Recipe[]>();
 
-    recipesChanged = new Subject<Recipe[]>();
+  private recipes: Recipe[] = [
+    new Recipe(
+      'Tasty Schnitzel',
+      'A super-tasty Schnitzel - just awesome!',
+      'https://upload.wikimedia.org/wikipedia/commons/7/72/Schnitzel.JPG',
+      [
+        new Ingredient('Meat', 1),
+        new Ingredient('French Fries', 20)
+      ]),
+    new Recipe('Big Fat Burger',
+      'What else you need to say?',
+      'https://upload.wikimedia.org/wikipedia/commons/b/be/Burger_King_Angus_Bacon_%26_Cheese_Steak_Burger.jpg',
+      [
+        new Ingredient('Buns', 2),
+        new Ingredient('Meat', 1)
+      ])
+  ];
 
-    private recipes: Recipe[] = [
-        new Recipe(
-          'Salmon, Tuna and Loach Sushi Rolls',
-          'Rinse the salmon, pat dry and cut into 5 mm ',
-          'https://images.eatsmarter.com/sites/default/files/styles/920x517/public/salmon-tuna-and-loach-sushi-rolls-561794.jpg',
-          [
-            new Ingredient("Salmon", 60),
-            new Ingredient("tuna loin", 60),
-            new Ingredient("wolf fish fillet", 80)
-          ]
-        ),
-        new Recipe(
-          'Salad with Egg, Tomato and Fish',
-          'Hard-boil the eggs in water for 8-10 minutes.',
-          'https://images.eatsmarter.com/sites/default/files/styles/920x517/public/salad-with-egg-tomato-and-fish-572530.jpg',
-          [
-            new Ingredient("cherry tomato", 200),
-            new Ingredient("canned tuna", 100),
-            new Ingredient("lemon juice", 3)
-          ]
-        )
-    ];
+  constructor(private slService: ShoppingListService) {}
 
-    constructor(private slService: ShoppingListService) {}
+  setRecipes(recipes: Recipe[]) {
+    this.recipes = recipes;
+    this.recipesChanged.next(this.recipes.slice());
+  }
 
-    getRecipes() {
-        return this.recipes.slice(); //get only copy of recipes not original recipes array..
-    }
+  getRecipes() {
+    return this.recipes.slice();
+  }
 
-    getRecipe(id: number) {
-      return this.recipes.slice()[id];
-    }
+  getRecipe(index: number) {
+    return this.recipes[index];
+  }
 
-    addRecipe(recipe: Recipe) {
-          this.recipes.push(recipe);
-          this.recipesChanged.next(this.recipes.slice());
-    }
+  addIngredientsToShoppingList(ingredients: Ingredient[]) {
+    this.slService.addIngredients(ingredients);
+  }
 
-    updateRecipe(index:number, newRecipe: Recipe) {
-        this.recipes[index] = newRecipe;
-        this.recipesChanged.next(this.recipes.slice());
-    }
+  addRecipe(recipe: Recipe) {
+    this.recipes.push(recipe);
+    this.recipesChanged.next(this.recipes.slice());
+  }
 
-    deleteRecipe(index: number) {
-      this.recipes.splice(index, 1);
-      this.recipesChanged.next(this.recipes.slice());
-    }
+  updateRecipe(index: number, newRecipe: Recipe) {
+    this.recipes[index] = newRecipe;
+    this.recipesChanged.next(this.recipes.slice());
+  }
 
-    addIngredientsToShoppingList(ingredients: Ingredient[]) {
-          this.slService.addIngredients(ingredients);
-    }
-
-    setRecipes(recipes: Recipe[]) {
-        this.recipes = recipes;
-        this.recipesChanged.next(this.recipes.slice());
-    }
-
-    deleteIngredients() {
-
-    }
+  deleteRecipe(index: number) {
+    this.recipes.splice(index, 1);
+    this.recipesChanged.next(this.recipes.slice());
+  }
 }

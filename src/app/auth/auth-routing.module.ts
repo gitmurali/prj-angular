@@ -1,21 +1,18 @@
-import {NgModule} from "@angular/core";
-import {SignupComponent} from "./signup/signup.component";
-import {SigninComponent} from "./signin/signin.component";
-import {RouterModule, Routes} from "@angular/router";
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
 
-const appRoutes: Routes = [
-  {path: 'signup', component: SignupComponent},
-  {path: 'signin', component: SigninComponent},
+import { SignupComponent } from './signup/signup.component';
+import { SigninComponent } from './signin/signin.component';
+
+const authRoutes: Routes = [
+  { path: 'signup', component: SignupComponent },
+  { path: 'signin', component: SigninComponent },
 ];
 
 @NgModule({
-  imports:[
-      RouterModule.forChild(appRoutes)
+  imports: [
+    RouterModule.forChild(authRoutes)
   ],
-  exports: [
-      RouterModule
-  ]
+  exports: [RouterModule]
 })
-export class AuthRoutingModule{
-
-}
+export class AuthRoutingModule {}
