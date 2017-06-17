@@ -28,6 +28,9 @@ export class AuthService {
                 this.token = token;
               }
             )
+        },
+        error => {
+          console.log(error)
         }
       )
       .catch(
@@ -40,6 +43,7 @@ export class AuthService {
   getToken() {
     firebase.auth().currentUser.getToken().then(
       (token: string) => {
+        console.log(token)
         this.token = token;
       }
     );
